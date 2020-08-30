@@ -45,3 +45,6 @@ def test_get_spotify_api_token_invalid_client_secret ():
 
     assert response.status_code == 400
     assert response.json() == { "detail": { "error": "invalid_client", "error_description": "Invalid client secret" } }
+
+
+

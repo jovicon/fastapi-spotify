@@ -52,7 +52,7 @@ def get_spotify_api_token(client_auth: Client_auth):
 
 
 @router.get("/spotify/{spotify_type}/{spotify_search}")
-def get_artist_data( spotify_type: SpotifyType , spotify_search: str, Authorization: Optional[str] = Header(None),  db: Session = Depends(deps.get_db)):
+def search_spotify_data_by_type( spotify_type: SpotifyType , spotify_search: str, Authorization: Optional[str] = Header(None),  db: Session = Depends(deps.get_db)):
     """
     Get Spotify Catalog information about albums, artists that match a keyword string.
 
@@ -64,11 +64,11 @@ def get_artist_data( spotify_type: SpotifyType , spotify_search: str, Authorizat
     
     if spotify_type == 'artist' or spotify_type == 'album':
         url = "https://api.spotify.com/v1/search?q=" + str(spotify_search) + "&type=artist&limit=40"
-        headers = { "Authorization": Authorization}
+        headers = { "Authorization": Authorization }
         response = requests.get(url,headers=headers)
 
         if response.status_code != 200:
-            raise HTTPException(status_code=response.status_code, detail="Pokemon not found")
+            raise HTTPException(status_code=response.status_code, detail = response.json())
 
         # instancing result model
         result = models.Result()
