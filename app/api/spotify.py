@@ -1,10 +1,15 @@
 import requests
 from app import config
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Header, Depends, HTTPException
+
+# importing ORM
+from sqlalchemy.orm import Session
+import crud, models, schemas
 
 
+# class to receive client data to get api token 
 class Client_auth(BaseModel):
     client_id: str
     client_secret: str
@@ -40,17 +45,21 @@ def get_spotify_api_token(client_auth: Client_auth):
     return response.json()
 
 
-@router.get("/spotify/{spotify_search}")
-def get_music_by_string(spotify_search: str):
-    """
-    Get pokemon data by id
 
-    Read data for a specific pokemon consuming from pokeapi
-    
-    Doesn't require authentication
+@router.get("/spotify/artist/{spotify_search}")
+def get_artist_data(spotify_search: str, Authorization: Optional[str] = Header(None),  db: Session = Depends(deps.get_db)):
     """
-    url = "https://pokeapi.co/api/v2/pokemon/" + str(spotify_search)
-    response = requests.get(url)
+    Get Spotify Catalog information about artists that match a keyword string.
+
+    Create Result from Spotify Data
+
+    Require authentication
+    """
+    url = "https://api.spotify.com/v1/search?q=" + str(spotify_search) + "&type=artist&limit=40"
+    headers = { "Authorization": Authorization}
+    response = requests.get(url,headers=headers)
+
+    db_result = crud.create_results()
 
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code, detail="Pokemon not found")
