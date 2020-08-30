@@ -100,4 +100,4 @@ def get_spotify_data( Authorization: Optional[str] = Header(None),  db: Session 
     """
     db_result = crud.get_results(db)
 
-    return db_result[0]
+    return db_result
