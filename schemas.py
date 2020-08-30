@@ -1,11 +1,11 @@
 from typing import List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Json
 
 class ResultBase(BaseModel):
     search: str
     search_type: str
-    result: dict
+    result: Json
 
 
 class ResultCreate(ResultBase):
