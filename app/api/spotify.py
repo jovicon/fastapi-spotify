@@ -16,7 +16,7 @@ router = APIRouter()
 @router.post("/spotify/api/token")
 def get_spotify_api_token(client_auth: Client_auth):
     """
-    Get api token from spotify 
+    Request api token from spotify 
 
     We will use this Bearer access token to login into other spotify apis
 

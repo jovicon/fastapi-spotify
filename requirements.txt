@@ -8,3 +8,4 @@ python-jose[cryptography]
 python-multipart
 python-dotenv
 requests
+psycopg2-binary
